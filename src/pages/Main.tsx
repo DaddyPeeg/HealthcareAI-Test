@@ -1,13 +1,13 @@
-import Sidebar from '@components/Sidebar';
-import Content from '@components/Content';
+import Sidebar from '@components/layout/Sidebar';
+import Content from '@components/layout/Content';
 
 const Main = () => {
   return (
-    <div className='flex flex-row w-full'>
-      <div className='flex w-[325px]'>
+    <div className='main-container'>
+      <div className='sidebar-container'>
         <Sidebar />
       </div>
-      <div className='flex-1'>
+      <div className='content-container'>
         <Content />
       </div>
     </div>

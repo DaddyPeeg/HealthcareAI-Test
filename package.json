@@ -24,7 +24,10 @@
     "vite": "^3.2.10"
   },
   "dependencies": {
+    "dayjs": "^1.11.11",
     "init": "^0.1.2",
-    "postcss-cli": "^11.0.0"
+    "postcss-cli": "^11.0.0",
+    "react-tailwindcss-datepicker": "^1.6.6",
+    "react-tailwindcss-select": "^1.8.5"
   }
 }

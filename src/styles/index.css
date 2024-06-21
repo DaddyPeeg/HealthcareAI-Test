@@ -6,4 +6,168 @@
 * {
   box-sizing: border-box;
   font-family: 'Inter', sans-serif;
+  font-size: 16px;
 }
+
+:root {
+  --color-primary: #624FF6;
+  --color-primary-light: rgba(112, 48, 160, 0.05);
+  --color-primary-light-focus: rgba(112, 48, 160, 0.1);
+  --color-secondary: #7030A0;
+  --color-accent: #F3F5F7;
+  --color-title: #111C30;
+  --color-sub-title: #344054;
+  --color-footer: #718096;
+  --color-white: #fff;
+  --color-gray: #B1B1B1;
+  --color-gray-light: #E5E5E5;
+}
+
+.hci-select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url('data:image/svg+xml,%3Csvg width="10" height="10" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M7 7L10 10L13 7" stroke="%23343A40" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/%3E%3C/svg%3E%0A');
+  background-repeat: no-repeat;
+  background-position: right 1.5rem center;
+  background-size: 1rem;
+  padding-right: 2.5rem;
+}
+
+.main-container {
+  @apply flex md:flex-row flex-col w-full overflow-auto
+}
+
+/* sidebar */
+
+.sidebar-container {
+  @apply flex md:w-[325px] w-full
+}
+
+.sidebar-content {
+  @apply flex flex-col w-full px-6 shadow-lg
+}
+
+.account-container {
+  @apply flex flex-col w-full h-[200px] mt-4 border border-gray rounded-[12px] p-3
+}
+
+.account-avatar {
+  @apply w-[60px] h-[60px] object-cover rounded-full
+}
+
+.account-name {
+  @apply mt-3 font-bold
+}
+
+.account-text {
+  @apply mt-1 font-light text-xs
+}
+
+.sidebar-header {
+  @apply flex items-center h-[80px]
+}
+
+.sidebar-title {
+  @apply text-lg text-title font-bold
+}
+
+.sidebar-history {
+  @apply flex flex-1 flex-col w-full mt-2
+}
+
+/* content */
+
+.content-container {
+  @apply flex-1
+}
+
+.content-content {
+  @apply flex flex-col gap-[40px]
+}
+
+.header-container {
+  @apply flex w-full h-[80px] items-center shadow-md
+}
+
+.header-title {
+  @apply text-2xl font-bold ml-5
+}
+
+.form-container {
+  @apply flex justify-center
+}
+
+.form-content {
+  @apply flex flex-col w-[80%] items-start gap-[40px]
+}
+
+.form-label {
+  @apply my-2
+}
+
+.form-input {
+  @apply p-4 w-full border border-gray-light rounded-[12px]
+}
+
+.form-input:focus-visible {
+  @apply outline-primary
+}
+
+.form-check-buttons-container {
+  @apply flex items-start content-start gap-[20px] flex-wrap
+}
+
+.check-btn {
+  @apply inline top-0 left-0 bg-accent py-[8px] px-[12px] text-sub-title hover:text-primary hover:bg-primary-light-focus rounded-2xl cursor-pointer
+}
+
+.footer-container {
+  @apply flex w-full h-[80px] justify-center items-center
+}
+
+.footer-text {
+  @apply text-xs font-light text-footer
+}
+
+.inline-form-container {
+  @apply flex items-start gap-[40px] self-stretch
+}
+
+.form-submit-container {
+  @apply flex content-end gap-[22px] w-full
+}
+
+.form-input-primary {
+  @apply p-4 pl-12 w-full border rounded-[12px] border-primary focus:ring-blue-500 focus:border-blue-500
+}
+
+.form-input-primary:focus-visible {
+  @apply outline-primary
+}
+
+/* button style */
+
+.btn {
+  @apply flex mt-4 py-[14px] px-[28px] w-full items-start rounded-[18px]
+}
+
+.btn-primary {
+  @apply bg-primary-light hover:bg-primary-light-focus
+}
+
+.btn-text {
+  @apply text-primary font-medium
+}
+
+.btn-submit {
+  @apply bg-primary rounded-[14px] text-white px-[30px] py-[17px]
+}
+
+/* divider */
+
+.divider-x {
+  @apply flex w-full border-b border-b-gray-light pb-2
+}
+
+
