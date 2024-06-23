@@ -1,5 +1,5 @@
-import Sidebar from '@components/layout/Sidebar';
-import Content from '@components/layout/Content';
+import Sidebar from '@components/pages/main/Sidebar';
+import Content from '@components/pages/main/Content';
 
 const Main = () => {
   return (

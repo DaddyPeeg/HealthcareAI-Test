@@ -1,6 +1,6 @@
 
 
-export default function Message({
+export default function IconMessage({
   width = 27,
   height = 26,
   onClick,

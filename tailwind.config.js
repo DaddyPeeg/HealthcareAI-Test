@@ -4,7 +4,7 @@ module.exports = {
   content: [
     "./src/**/*.{html,js,jsx,ts,tsx}",
     "./node_modules/react-tailwindcss-datepicker/dist/index.esm.js",
-    "./node_modules/react-tailwindcss-select/dist/index.esm.js"
+    "./node_modules/react-tailwindcss-select/dist/index.esm.js",
   ],
   theme: {
     extend: {
@@ -20,9 +20,11 @@ module.exports = {
         'white': "var(--color-white)",
         'gray': "var(--color-gray)",
         'gray-light': "var(--color-gray-light)",
-        'gray-300': "var(--color-gray)"
+        'gray-light-100': "var(--color-gray-light-100)",
+        'gray-300': "var(--color-gray)",
       }
     }
   },
-  plugins: []
+  plugins: [
+  ]
 }

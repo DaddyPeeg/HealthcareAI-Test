@@ -1,18 +1,40 @@
 import { useState } from "react";
 import Datepicker from "react-tailwindcss-datepicker";
-import Message from "@svgs/Message";
+import IconMessage from "@svgs/IconMessage";
 import langSnippet from "@utils/LangSnippet";
-import CheckButtons from "@components/common/CheckButtons";
+import CheckButtons from "@components/core/CheckButtons";
+import CarrierModal from "@components/pages/main/modals/CarrierModal"
+import CheckBox from "@components/core/CheckBox";
 
+
+var checkedCarriers = [
+  "Ambetter", "UnitedHealthcare", "Anthem", "Centene"
+]
 const Content = () => {
+  
   const [date, setDate] = useState({
     startDate: new Date(),
     endDate: new Date()
   }
   )
+  const [carrierModal, setCarrierModal] = useState(false)
+  const [carriers, setCarriers] = useState<string[]>([])
 
   const handleChange = (newValue: any) => {
     setDate(newValue);
+  }
+
+  const handleCheckBox = (item: string) => {
+    console.log('item log', item)
+  }
+
+  const onCarrierModalClose = () => {
+    setCarrierModal(false);
+  }
+
+  const onCarrierSave = (items: string[]) => {
+    setCarriers([...items]);
+    setCarrierModal(false);
   }
 
   return (
@@ -40,10 +62,23 @@ const Content = () => {
           </div>
           <div className="w-full">
             <p className='form-label'>{langSnippet.carrier.label}</p>
-            <CheckButtons
-              options={langSnippet.carrier.options}
-              handleChange={handleChange}
-            />
+            <div className="form-carrier-container">
+              <div className='checked-carriers-container'>
+                {
+                  langSnippet.carrier.options.map((carrier: string, idx: number) => {
+                    return (
+                      <CheckBox
+                        checked={checkedCarriers.includes(carrier)}
+                        label={carrier}
+                        handleCheckBox={handleCheckBox}
+                        key={idx}
+                      />
+                    )
+                  })
+                }
+              </div>
+              <button className="btn-primary-lg btn-outlined" onClick={() => setCarrierModal(true)}>+ Add Carriers</button>
+            </div>
           </div>
           <div className="w-full">
             <p className='form-label'>{langSnippet.recommendedPlan.label}</p>
@@ -66,17 +101,17 @@ const Content = () => {
             </textarea>
           </div>
           <div className="inline-form-container">
-            <div className='flex-1'>
+            <div className='inline-form-element'>
               <p className="mb-2">First name</p>
               <input type='text' placeholder='Ex: John' className="form-input" />
             </div>
-            <div className='flex-1'>
+            <div className='inline-form-element'>
               <p className="mb-2">Last name</p>
               <input type='text' placeholder='Ex: John' className="form-input" />
             </div>
           </div>
           <div className="inline-form-container">
-            <div className='flex-1'>
+            <div className='inline-form-element'>
               <p className="mb-2">Date of Birth</p>
               <Datepicker
                 value={date}
@@ -87,22 +122,33 @@ const Content = () => {
                 placeholder={'Select date'}
               />
             </div>
-            <div className='flex-1'>
+            <div className='inline-form-element'>
               <p className="mb-2">DOB income</p>
               <select placeholder='0-10k/year' className="form-input hci-select">
                 <option>0-10k/year</option>
               </select>
             </div>
           </div>
+          <div className="inline-form-container">
+            <div className='inline-form-element'>
+              <p className="mb-2">Number of Dependents</p>
+              <select placeholder='0' className="form-input hci-select">
+                <option>0</option>
+                <option>1</option>
+                <option>2</option>
+              </select>
+            </div>
+            <div className="inline-form-element"></div>
+          </div>
           <div className="divider-x"></div>
           <div className="form-submit-container">
-            <div className="flex flex-1 relative">
+            <div className="flex flex-1 w-full relative">
               <input type='text' placeholder="Hi how may i help you, please enter..." className="form-input-primary" />
               <div className='absolute top-4 left-4'>
-                <Message />
+                <IconMessage />
               </div>
             </div>
-            <div className="flex">
+            <div className="flex md:w-auto w-full">
               <button className='btn-submit'>Test welcome message</button>
             </div>
           </div>
@@ -111,6 +157,14 @@ const Content = () => {
       <div className='footer-container'>
         <p className='footer-text'>© 2024 Obamacare AI. All Rights Reserved.</p>
       </div>
+      <CarrierModal
+        className="w-full"
+        open={carrierModal}
+        selectedCarriers={carriers}
+        options={langSnippet.carrier.options}
+        onClose={onCarrierModalClose}
+        onSave={onCarrierSave}
+      />
     </div>
   )
 }
