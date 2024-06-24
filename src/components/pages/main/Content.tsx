@@ -1,16 +1,21 @@
 import { useState } from "react";
+import { useRecoilState } from 'recoil';
 import Datepicker from "react-tailwindcss-datepicker";
 import IconMessage from "@svgs/IconMessage";
 import langSnippet from "@utils/LangSnippet";
 import CheckButtons from "@components/core/CheckButtons";
 import CarrierModal from "@components/pages/main/modals/CarrierModal"
 import CheckBox from "@components/core/CheckBox";
+import { settingAtom } from '@state/Setting';
+import { SettingInterface } from "@types/Setting";
 
 
 var checkedCarriers = [
   "Ambetter", "UnitedHealthcare", "Anthem", "Centene"
 ]
 const Content = () => {
+
+  const [setting, setSetting] = useRecoilState<SettingInterface>(settingAtom);
   
   const [date, setDate] = useState({
     startDate: new Date(),
@@ -21,7 +26,7 @@ const Content = () => {
   const [carriers, setCarriers] = useState<string[]>([])
 
   const handleChange = (newValue: any) => {
-    setDate(newValue);
+    
   }
 
   const handleCheckBox = (item: string) => {

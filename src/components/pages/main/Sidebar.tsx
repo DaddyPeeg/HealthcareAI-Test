@@ -1,11 +1,15 @@
 import { useState } from 'react';
+import { useRecoilState } from 'recoil';
+import { settingAtom } from '@state/Setting';
 import icon1 from '@img/icon1.jpg';
 import IconRotateLeft from '@svgs/IconRotateLeft';
 import ApiKeyModal from '@components/pages/main/modals/ApiKeyModal';
 import ExcelExploreModal from '@components/pages/main/modals/ExcelExploreModal';
+import { SettingInterface } from '@types/Setting';
 
 const Sidebar = () => {
 
+  const [setting, setSetting] = useRecoilState<SettingInterface>(settingAtom);
   const [apiKeyModal, setApiKeyModal] = useState(false)
   const [expModal, setExpModal] = useState(false)
 
@@ -16,7 +20,7 @@ const Sidebar = () => {
   const handleExpSave = () => {
     setExpModal(false)
   }
-  
+
   return (
     <div className='sidebar-content'>
       <div className='sidebar-header'>

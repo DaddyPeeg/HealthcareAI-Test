@@ -1,10 +1,20 @@
 import { useState } from "react"
+import { useRecoilState } from 'recoil'
+import { oaKeySelector } from '@state/Setting'
 import IconSave from "@svgs/IconSave"
+import { OpenAiAPIKeyInterface } from "@types/Setting"
 
 const ApiKeyModal = ({open, onClose, onConnect} : {open: boolean, onClose: any, onConnect: any}) => {
   
   const [whiteLink, setWhiteLink] = useState(false)
-  
+  const [oaKey, setOaKey] = useRecoilState<OpenAiAPIKeyInterface>(oaKeySelector)
+
+  const handleChange = (e: any) => {
+    setOaKey({
+      oaKey,
+      apiKey: e.target.value
+    })
+  }
   return (
     <div
       className={`modal-container ${open ? "visible bg-black/20" : "invisible"}`}
@@ -19,7 +29,7 @@ const ApiKeyModal = ({open, onClose, onConnect} : {open: boolean, onClose: any, 
             <div className="inline-form-container">
               <div className='inline-form-element'>
                 <p className="mb-2">Your API</p>
-                <input type='text' placeholder='API' className="form-input" />
+                <input type='text' value={oaKey.apiKey} onChange={handleChange} placeholder='API' className="form-input" />
               </div>
               <div className='inline-form-element'>
                 <p className="mb-2">Secret Key</p>
