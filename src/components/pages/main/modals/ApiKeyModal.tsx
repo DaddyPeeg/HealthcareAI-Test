@@ -29,7 +29,7 @@ const ApiKeyModal = ({open, onClose, onConnect} : {open: boolean, onClose: any, 
             <div className="inline-form-container">
               <div className='inline-form-element'>
                 <p className="mb-2">Your API</p>
-                <input type='text' value={oaKey.apiKey} onChange={handleChange} placeholder='API' className="form-input" />
+                <input type='text' onChange={handleChange} placeholder='API' className="form-input" />
               </div>
               <div className='inline-form-element'>
                 <p className="mb-2">Secret Key</p>

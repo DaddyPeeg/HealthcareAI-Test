@@ -1,7 +1,43 @@
+import { useState } from 'react'
 import IconSearch from '@svgs/IconSearch';
 import CheckBox from '@components/core/CheckBox';
+import { useRecoilState } from 'recoil';
+import { settingAtom } from '@state/Setting';
+import { SettingInterface } from "@types/Setting";
 
-const CarrierModal = ({open, onClose, onSave, selectedCarriers, options} : {open: boolean, onClose: any, onSave: any, selectedCarriers: string[], options: string[]}) => {
+const CarrierModal = ({open, onClose, selectedCarriers, options} : {open: boolean, onClose: any, selectedCarriers: string[], options: string[]}) => {
+
+  const [setting, setSetting] = useRecoilState<SettingInterface>(settingAtom);
+  const [carriers, setCarriers] = useState<string[]>([...selectedCarriers]);
+
+  const handleCheckBox = (event: any, value: string, type: string) => {
+    console.log('handle event change', event, value, type)
+    if (type == 'selectAll') {
+      if (carriers.length == options.length) {
+        setCarriers([])
+      } else {
+        setCarriers([...options])
+      }
+    } else if (type == 'carriers') {
+      let idx = carriers.findIndex((carrier: string) => carrier == value)
+      if (idx == -1) {
+        setCarriers([...carriers, value])
+      } else {
+        let newCarriers = [...carriers]
+        newCarriers.splice(idx, 1)
+        setCarriers([...newCarriers])
+      }
+    }
+  }
+
+  const onSaveCarriers = () => {
+    setSetting({
+      ...setting,
+      carriers: [...carriers]
+    })
+    onClose()
+  }
+  
   return (
     <div
       className={`modal-container ${open ? "visible bg-black/20" : "invisible"}`}
@@ -22,6 +58,9 @@ const CarrierModal = ({open, onClose, onSave, selectedCarriers, options} : {open
             <div className='flex flex-1 items-center md:justify-center justify-start mt-4 md:w-full'>
               <CheckBox 
                 label="Select All"
+                checked={carriers.length == options.length}
+                type="selectAll"
+                handleChange={handleCheckBox}
                 />
             </div>
           </div>
@@ -30,7 +69,10 @@ const CarrierModal = ({open, onClose, onSave, selectedCarriers, options} : {open
               options.map((option: string, idx: number) => {
                 return (
                   <CheckBox 
+                    checked={carriers.includes(option)}
                     label={option}
+                    type='carriers'
+                    handleChange={handleCheckBox}
                     key={idx}
                     />
                 )
@@ -43,7 +85,7 @@ const CarrierModal = ({open, onClose, onSave, selectedCarriers, options} : {open
                 <button className="flex items-center" onClick={onClose}>Cancel</button>
               </div>
               <div>
-                <button className="flex btn btn-gray" onClick={onSave}>Save</button>
+                <button className="flex btn btn-gray" onClick={onSaveCarriers}>Save</button>
               </div>
             </div>
           </div>

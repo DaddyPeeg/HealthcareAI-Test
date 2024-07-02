@@ -14,6 +14,9 @@ export interface SettingInterface {
   dob: string
   income: number
   dependents: number
+  zipCode: number
+  agentFirstName: string
+  agentLastName: string
 }
 
 export interface OpenAiAPIKeyInterface {

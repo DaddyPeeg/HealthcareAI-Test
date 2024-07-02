@@ -1,10 +1,16 @@
 import Main from '@pages/Main';
-import { RecoilRoot } from 'recoil'
+import Loader from '@components/common/Loader'
+import { appStateAtom } from './state/AppState';
+import { useRecoilState } from 'recoil';
+import { AppStateInterface } from '@types/AppState';
+
 
 export default function App() {
+  const [appState, setAppState] = useRecoilState<AppStateInterface>(appStateAtom)
   return (
-    <RecoilRoot>
-      <Main />
-    </RecoilRoot>
+      <>
+        <Main />
+        <Loader isLoading={appState.isLoading}/>
+      </>
   )
 }

@@ -1,9 +1,9 @@
-const CheckButtons = ({options, handleChange} : {options: string[], handleChange: any}) => {
+const CheckButtons = ({options, value, type, handleChange} : {options: string[], type: string, value: string, handleChange: any}) => {
   return (
     <div className="form-check-buttons-container">
       {
         options.map((option: string, idx: number) => {
-          return (<div className='check-btn' key={idx}>{option}</div>)
+          return (<div className={option != value ? 'check-btn' : 'check-btn-checked'} key={idx} onClick={(e) => handleChange(e, type)} >{option}</div>)
         })
       }
     </div>

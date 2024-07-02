@@ -13,11 +13,11 @@ const langSnippet = {
   },
   carrier: {
     label: "Health Insurance Carriers Selection",
-    options: ["Aetna", "Bue Cross Blue Shield", "Cigna", "Humana", "Ambetter", "UnitedHealthcare", "Anthem", "Centene", "Molina Healthcare", "Health Care Service Corporation(HCSC)"]
+    options: ["Aetna", "Blue Cross Blue Shield", "Cigna", "Humana", "Ambetter", "UnitedHealthcare", "Anthem", "Centene", "Molina Healthcare", "Health Care Service Corporation(HCSC)"]
   },
   recommendedPlan: {
     label: "How should the chatbot present plan recommendations?",
-    options: ["One best plan and reason why", "Platinum", "Bronze", "Extended bronze"]
+    options: ["One best plan and reason why", "The best 3 plans"]
   },
   chatbotQuestion: {
     label: "Are there any specific questions or statements you want the chatbot to ask?",
@@ -29,9 +29,9 @@ const langSnippet = {
   },
   exMessage: {
     label: "If you have an example of a perfect welcome message, please paste it below.",
-    placeholder: "Ex: Hey [Customer], this is Ana with ACA benefits center.\n\nThank you for applying for $0 or low cost health plans.\nI found $0 plan SelectHealth Value Silver 6300 - No Ded in your zip code 84104.  Are their any medications or doctors that you'd like to stay aligned with before enrolling you in this plan?"
+    placeholder: "Ex: Hey [Customer], this is [Agent Name] with ACA benefits center.\n\nThank you for applying for $0 or low cost health plans.\nI found $0 plan [Insurance plan with carrier name] in your zip code [zipcode].  Are their any medications or doctors that you'd like to stay aligned with before enrolling you in this plan?"
   },
-  
+
 }
 
 export default langSnippet;
