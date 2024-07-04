@@ -24,13 +24,15 @@ const Sidebar = () => {
 
   useEffect(() => {
     const fetchAgent = () => {
+
       const apiClient = new API('')
       apiClient.get('agent', {
         client_id: clientId
       })
         .then((response: any) => {
-
-          console.log('response', response.status)
+          if (!response) {
+            return;
+          }
           const data = response.location
           setAgent({
             agentId: data.companyId,
@@ -70,7 +72,7 @@ const Sidebar = () => {
     let backendUrl = import.meta.env.VITE_BACKEND_URL;
     let ghlUrl = import.meta.env.VITE_GHL_BASE_URL;
     let clientId = import.meta.env.VITE_GHL_CLIENT_ID;
-    let scope = '&scope=conversations/message.readonly conversations/message.write users.readonly users.write locations.readonly'
+    let scope = '&scope=conversations/message.readonly conversations/message.write users.readonly users.write locations.readonly contacts.readonly contacts.write'
     let oauthUrl = ghlUrl + 'oauth/chooselocation?response_type=code&' + 'client_id=' + clientId + '&redirect_uri=' + backendUrl + 'oauth/callback&' + scope
     window.location.href = oauthUrl
   }

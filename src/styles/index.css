@@ -229,3 +229,20 @@
 .modal-content {
   @apply bg-white shadow  p-[30px] rounded-[20px]
 }
+
+
+.multi-select-menu-button {
+  @apply flex p-2 border border-gray-light rounded-[12px] shadow-sm transition-all duration-300 bg-white focus:border-primary
+}
+
+.multi-select-menu {
+  @apply absolute z-10 w-full bg-white shadow-lg border border-gray-light rounded-[12px] py-1 mt-1.5
+}
+
+.multi-select-list {
+  @apply overflow-y-auto p-1 max-h-[200px]
+}
+
+.multi-select-tag-item {
+  @apply bg-white border border-gray-light rounded-[8px] flex p-2
+}

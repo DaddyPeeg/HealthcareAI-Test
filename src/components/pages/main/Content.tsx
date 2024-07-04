@@ -10,16 +10,18 @@ import { settingAtom } from '@state/Setting';
 import { appStateAtom } from '@state/AppState';
 import { SettingInterface } from "@types/Setting";
 import { AppStateInterface } from "@types/AppState";
+import Select from "react-tailwindcss-select";
 
 import API from "@utils/API";
 
 const Content = () => {
-
   const [appState, setAppState] = useRecoilState<AppStateInterface>(appStateAtom)
   const [setting, setSetting] = useRecoilState<SettingInterface>(settingAtom);
   const [apiClient, setApiClient] = useState<any>(null);
   const [gptResponse, setGptResponse] = useState('');
   const [resize, setResize] = useState(false);
+  const [users, setUsers] = useState<any>([]);
+  const [selectedUsers, setSelectedUsers] = useState<any>([]);
   const [date, setDate] = useState({
     startDate: new Date(),
     endDate: new Date()
@@ -33,7 +35,27 @@ const Content = () => {
     window.addEventListener('resize', () => {
       setResize(!resize)
     })
-  }, [])
+    if (appState.connected) {
+      setAppState({
+        ...appState,
+        isLoading: true
+      })
+      apiClient
+        .get('api/v1/users')
+        .then((res: any) => {
+          setUsers([{ 'value': '_all', 'label': 'Select All' }, ...res.data])
+        })
+        .catch((error: any) => {
+          console.log('error ====>', error)
+        })
+        .finally(() => {
+          setAppState({
+            ...appState,
+            isLoading: false
+          })
+        })
+    }
+  }, [appState.connected])
 
   useEffect(() => {
     const gptResponseForm = responseRef.current
@@ -44,11 +66,27 @@ const Content = () => {
 
   }, [gptResponse, resize])
 
+  const handleUsersChange = (updatedUsers: any) => {
+    console.log('selected users', updatedUsers)
+    if (!updatedUsers) {
+      setSelectedUsers([]);
+      return;
+    }
+
+    const isAllSelected = updatedUsers.some((u: any) => u.value === '_all');
+    if (isAllSelected) {
+      setSelectedUsers(users.filter((u: any) => u.value !== '_all'));
+    } else {
+      setSelectedUsers(updatedUsers);
+    }
+  };
+
+
   const handleChange = (event: any, type: string) => {
     if (type == 'plan') {
       setSetting({
         ...setting,
-        [type]: event.target.outerText
+        [type]: setting.plan == event.target.outerText ? '' : event.target.outerText
       })
     } else if (type == 'recommendedPlan') {
       let idx = langSnippet.recommendedPlan.options.findIndex((item: string) => item == event.target.outerText)
@@ -80,26 +118,26 @@ const Content = () => {
     setCarrierModal(false);
   }
 
-  const getMessage = () => {
+  const getMessage = (e: any, mode: boolean) => {
+    e.preventDefault();
     setAppState({
       ...appState,
       isLoading: true
     })
     const apiClient = new API('')
-    apiClient.post('gpt/ask', { ...setting })
+    apiClient.post('gpt/ask', { ...setting, users: mode ? [...selectedUsers] : [] })
       .then((response: any) => {
-        console.log('res', response)
         setGptResponse(response.message)
       })
       .catch((error: any) => {
         console.log('error', error)
       })
-    .finally(() => {
-      setAppState({
-        ...appState,
-        isLoading: false
+      .finally(() => {
+        setAppState({
+          ...appState,
+          isLoading: false
+        })
       })
-    })
   }
 
   return (
@@ -147,7 +185,7 @@ const Content = () => {
                   })
                 }
               </div>
-              <button className="btn-primary-lg btn-outlined" onClick={() => setCarrierModal(true)}>+ Add Carriers</button>
+              <button className="btn-primary-lg btn-outlined" onClick={(e: any) => { e.preventDefault(); setCarrierModal(true) }}>+ Add Carriers</button>
             </div>
           </div>
           <div className="w-full">
@@ -195,7 +233,7 @@ const Content = () => {
               />
             </div>
             <div className='inline-form-element'>
-              <p className="mb-2">DOB income</p>
+              <p className="mb-2">income</p>
               <select placeholder='0-10k/year' onChange={(e) => handleChange(e, 'income')} className="form-input hci-select">
                 <option value={0}>0-10k/year</option>
                 <option value={1}>11-30k/year</option>
@@ -209,11 +247,13 @@ const Content = () => {
                 <option value={0}>0</option>
                 <option value={1}>1</option>
                 <option value={2}>2</option>
+                <option value={3}>3</option>
+                <option value={4}>4</option>
               </select>
             </div>
             <div className='inline-form-element'>
               <p className="mb-2">Postal Code</p>
-              <input type='text' placeholder='123456' value={setting.zipCode} onChange={(e) => handleChange(e, 'zipCode')} className="form-input" />
+              <input required type='text' placeholder='123456' value={setting.zipCode} onChange={(e) => handleChange(e, 'zipCode')} className="form-input" />
             </div>
           </div>
           <div className="divider-x"></div>
@@ -225,7 +265,41 @@ const Content = () => {
               </div>
             </div>
             <div className="flex md:w-auto w-full">
-              <button className='btn-submit' disabled={!appState.connected} onClick={getMessage}>Test welcome message</button>
+              <button className='btn-submit' onClick={(e: any) => getMessage(e, false)}>Test welcome message</button>
+            </div>
+          </div>
+          <div className="divider-x"></div>
+          <div className="form-submit-container justify-center mb-[150px]">
+            <div className="flex flex-1 w-full relative">
+              <div className="inline-form-element">
+                <p className="mb-2">Users Select</p>
+                <div className="w-full flex flex-col md:flex-row items-center">
+                  <div className="flex flex-1 w-full relative md:mr-4 mb-4 md:mb-0">
+                    <Select
+                      isClearable={true}
+                      primaryColor={"violet"}
+                      value={selectedUsers}
+                      isMultiple={true}
+                      onChange={handleUsersChange}
+                      options={users}
+                      placeholder={'No users selected'}
+                      classNames={{
+                        'menuButton': (value: any) => {
+                          return 'multi-select-menu-button'
+                        },
+                        'menu': 'multi-select-menu',
+                        'list': 'multi-select-list',
+                        'tagItem': (value: any) => {
+                          return 'multi-select-tag-item'
+                        }
+                      }}
+                    />
+                  </div>
+                  <div className="flex md:w-auto w-full h-full items-center">
+                    <button className='btn-submit' onClick={(e: any) => getMessage(e, true)} disabled={!appState.connected || selectedUsers.length == 0}>Text message to users</button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

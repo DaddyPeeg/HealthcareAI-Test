@@ -30,7 +30,7 @@ export const defaultSetting: SettingInterface = {
   exMessage: '',
   firstName: '',
   lastName: '',
-  dob: '1970-01-01',
+  dob: '2024-01-01',
   income: 0,
   dependents: 0,
   zipCode: '',
