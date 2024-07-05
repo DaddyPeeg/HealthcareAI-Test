@@ -1,6 +1,7 @@
 import { SettingInterface, OpenAiAPIKeyInterface, ExcelExploreInterface } from '@types/Setting';
 import { AppStateInterface } from '@types/AppState';
 import { AgentInterface } from '@types/Agent';
+import API from '@utils/API';
 
 export const defaultOpenAiAPIKey: OpenAiAPIKeyInterface = {
   apiKey: '',
@@ -20,6 +21,8 @@ export const defaultExcelExplore: ExcelExploreInterface = {
 export const defaultSetting: SettingInterface = {
   openAiAPIKey: defaultOpenAiAPIKey,
   excelExplore: defaultExcelExplore,
+  id: '',
+  formatName: '',
   mission: '',
   tone: '',
   plan: 'Silver(Recommended)',
@@ -55,6 +58,9 @@ export const defaultAgent: AgentInterface = {
 }
 
 export const defaultAppState: AppStateInterface = {
+  formats: [],
+  apiClient: new API(''),
+  currentFormatId: '',
   isLoading: false,
-  connected: false
+  connected: false,
 }

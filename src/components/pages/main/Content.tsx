@@ -1,27 +1,30 @@
 import { useEffect, useState, useRef } from "react";
 import { useRecoilState } from 'recoil';
 import Datepicker from "react-tailwindcss-datepicker";
+import Select from "react-tailwindcss-select";
 import IconMessage from "@svgs/IconMessage";
 import langSnippet from "@utils/LangSnippet";
 import CheckButtons from "@components/core/CheckButtons";
-import CarrierModal from "@components/pages/main/modals/CarrierModal"
 import CheckBox from "@components/core/CheckBox";
+import ModalContainer from "@components/common/ModalContainer";
+import CarrierModal from "@components/pages/main/modals/CarrierModal"
 import { settingAtom } from '@state/Setting';
 import { appStateAtom } from '@state/AppState';
 import { SettingInterface } from "@types/Setting";
 import { AppStateInterface } from "@types/AppState";
-import Select from "react-tailwindcss-select";
-
-import API from "@utils/API";
+import { defaultSetting } from "@utils/Default";
 
 const Content = () => {
   const [appState, setAppState] = useRecoilState<AppStateInterface>(appStateAtom)
   const [setting, setSetting] = useRecoilState<SettingInterface>(settingAtom);
-  const [apiClient, setApiClient] = useState<any>(null);
+  const [formatName, setFormatName] = useState('')
   const [gptResponse, setGptResponse] = useState('');
   const [resize, setResize] = useState(false);
   const [users, setUsers] = useState<any>([]);
   const [selectedUsers, setSelectedUsers] = useState<any>([]);
+  const [modalsStatus, setModalsStatus] = useState<any>({
+    formatNameModal: false
+  })
   const [date, setDate] = useState({
     startDate: new Date(),
     endDate: new Date()
@@ -31,7 +34,7 @@ const Content = () => {
   const responseRef = useRef(null);
 
   useEffect(() => {
-    setApiClient(new API(''))
+
     window.addEventListener('resize', () => {
       setResize(!resize)
     })
@@ -40,6 +43,7 @@ const Content = () => {
         ...appState,
         isLoading: true
       })
+      const apiClient = appState.apiClient
       apiClient
         .get('api/v1/users')
         .then((res: any) => {
@@ -67,7 +71,6 @@ const Content = () => {
   }, [gptResponse, resize])
 
   const handleUsersChange = (updatedUsers: any) => {
-    console.log('selected users', updatedUsers)
     if (!updatedUsers) {
       setSelectedUsers([]);
       return;
@@ -83,7 +86,9 @@ const Content = () => {
 
 
   const handleChange = (event: any, type: string) => {
-    if (type == 'plan') {
+    if (type == 'formatName') {
+      setFormatName(event.target.value)
+    } else if (type == 'plan') {
       setSetting({
         ...setting,
         [type]: setting.plan == event.target.outerText ? '' : event.target.outerText
@@ -118,13 +123,17 @@ const Content = () => {
     setCarrierModal(false);
   }
 
+  const openFormatTitleModal = () => {
+    setModalsStatus({ ...modalsStatus, formatNameModal: true })
+    setFormatName(setting.formatName)
+  }
   const getMessage = (e: any, mode: boolean) => {
     e.preventDefault();
     setAppState({
       ...appState,
       isLoading: true
     })
-    const apiClient = new API('')
+    const apiClient = appState.apiClient
     apiClient.post('gpt/ask', { ...setting, users: mode ? [...selectedUsers] : [] })
       .then((response: any) => {
         setGptResponse(response.message)
@@ -137,6 +146,40 @@ const Content = () => {
           ...appState,
           isLoading: false
         })
+      })
+  }
+
+  const saveFavFormat = (e: any, formatName: string) => {
+    setModalsStatus({
+      ...modalsStatus,
+      formatNameModal: false
+    })
+    setAppState((prev: any) => ({
+      ...prev,
+      isLoading: true
+    }))
+    const apiClient = appState.apiClient
+
+    apiClient
+      .post('api/v1/msg/format', { ...setting, 'formatName': formatName })
+      .then((res: any) => {
+        setAppState((prev: any) => ({
+          ...prev,
+          formats: [...res.data]
+        }))
+        setSetting((prev: any) => ({
+          ...defaultSetting
+        }))
+        setGptResponse('')
+      })
+      .catch((error: any) => {
+        console.log('error', error)
+      })
+      .finally(() => {
+        setAppState((prev: any) => ({
+          ...prev,
+          isLoading: false
+        }))
       })
   }
 
@@ -267,6 +310,9 @@ const Content = () => {
             <div className="flex md:w-auto w-full">
               <button className='btn-submit' onClick={(e: any) => getMessage(e, false)}>Test welcome message</button>
             </div>
+            <div className="flex md:w-auto w-full">
+              <button className='btn-submit' onClick={openFormatTitleModal}>Save as favourite format</button>
+            </div>
           </div>
           <div className="divider-x"></div>
           <div className="form-submit-container justify-center mb-[150px]">
@@ -315,6 +361,19 @@ const Content = () => {
         onClose={onCarrierModalClose}
         onSave={onCarrierSave}
       />
+      <ModalContainer
+        title="Format Title"
+        isOpen={modalsStatus.formatNameModal}
+        onClose={() => { setModalsStatus({ ...modalsStatus, formatNameModal: false }); setFormatName(setting.formatName) }}
+        onConfirm={(e: any, data: any) => { saveFavFormat(e, formatName) }}
+      >
+        <div className="inline-form-container">
+          <div className="inline-form-element">
+            <p className="mb-2">Format Name</p>
+            <input type='text' placeholder='Format Name' value={formatName} onChange={(e) => handleChange(e, 'formatName')} className="form-input" />
+          </div>
+        </div>
+      </ModalContainer>
     </div>
   )
 }

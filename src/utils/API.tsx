@@ -57,4 +57,25 @@ export default class API {
       })
     })
   }
+
+  async delete(url: string, params?: any) {
+    return new Promise((resolve, reject) => {
+      axios
+        .delete(`${this.baseUrl + url}`, {
+          headers: this.getHeaders(),
+          params
+        })
+        .then((response: any) => {
+          if (response && [200, 201, 204].includes(response.status)) {
+            const { data } = response
+            resolve(data);
+          } else {
+            reject('Error')
+          }
+        })
+      .catch(error => {
+        reject(error?.response?.data || 'Unknown Error!')
+      })
+    })
+  }
 }

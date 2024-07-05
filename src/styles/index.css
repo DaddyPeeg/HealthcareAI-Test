@@ -77,6 +77,10 @@
   @apply flex flex-1 flex-col w-full mt-2
 }
 
+.formats-buttons-container {
+  @apply flex mt-3 w-full flex-col gap-[12px]
+}
+
 /* content */
 
 .content-container {
@@ -127,6 +131,15 @@
   @apply inline top-0 left-0 bg-accent py-[8px] px-[12px] text-sub-title text-primary bg-primary-light-focus rounded-2xl cursor-pointer
 }
 
+
+.check-block-btn {
+  @apply block w-full bg-accent py-[8px] px-[12px] text-sub-title hover:text-primary hover:bg-primary-light-focus rounded-2xl cursor-pointer
+}
+
+.check-block-btn-checked {
+  @apply block w-full bg-accent py-[8px] px-[12px] text-sub-title text-primary bg-primary-light-focus rounded-2xl cursor-pointer
+}
+
 .form-carrier-container {
   @apply  w-full flex flex-col items-start p-[20px] bg-primary-light-focus rounded-[12px]
 }
@@ -148,7 +161,7 @@
 }
 
 .inline-form-container {
-  @apply flex md:flex-row flex-col items-start gap-[40px] self-stretch
+  @apply flex md:flex-row w-full flex-col items-start gap-[40px] self-stretch
 }
 
 .inline-form-element {

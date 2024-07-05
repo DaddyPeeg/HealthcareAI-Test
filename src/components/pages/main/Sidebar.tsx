@@ -2,30 +2,29 @@ import { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { settingAtom } from '@state/Setting';
 import { appStateAtom } from '@state/AppState';
-import icon1 from '@img/icon1.jpg';
 import IconRotateLeft from '@svgs/IconRotateLeft';
 import ApiKeyModal from '@components/pages/main/modals/ApiKeyModal';
 import ExcelExploreModal from '@components/pages/main/modals/ExcelExploreModal';
 import { SettingInterface } from '@types/Setting';
-import API from '@utils/API';
 import { AgentInterface } from '@types/Agent';
 import { defaultAgent } from '@utils/Default'
 import { AppStateInterface } from '@types/AppState';
+import { defaultSetting } from '@utils/Default'
 
 const clientId = import.meta.env.VITE_GHL_CLIENT_ID;
 
 const Sidebar = () => {
 
   const [setting, setSetting] = useRecoilState<SettingInterface>(settingAtom);
+  const [appState, setAppState] = useRecoilState<AppStateInterface>(appStateAtom)
   const [apiKeyModal, setApiKeyModal] = useState(false)
   const [expModal, setExpModal] = useState(false)
   const [agent, setAgent] = useState<AgentInterface>(defaultAgent)
-  const [appState, setAppState] = useRecoilState<AppStateInterface>(appStateAtom)
+  const [isMounted, setIsMounted] = useState(false)
 
   useEffect(() => {
     const fetchAgent = () => {
-
-      const apiClient = new API('')
+      const apiClient = appState.apiClient
       apiClient.get('agent', {
         client_id: clientId
       })
@@ -34,7 +33,8 @@ const Sidebar = () => {
             return;
           }
           const data = response.location
-          setAgent({
+          setAgent((prev: any) => ({
+            ...prev,
             agentId: data.companyId,
             companyName: data.name,
             firstName: data.firstName,
@@ -47,23 +47,67 @@ const Sidebar = () => {
             postalCode: data.business.postalCode,
             email: data.business.email,
             registerDate: (new Date(data.dateAdded)).toLocaleString('en-US', { year: 'numeric', month: 'short' })
-          })
+          }))
           setSetting({
             ...setting,
             agentFirstName: data.firstName,
             agentLastName: data.lastName,
           })
-          setAppState({
-            ...appState,
+          setAppState((prev: any) => ({
+            ...prev,
             connected: !appState.connected
-          })
+          }))
+          setIsMounted(true)
         })
         .catch((error: any) => {
           console.log('error', error)
         })
     }
     fetchAgent()
+    fetchFormats()
   }, [])
+
+  const fetchFormats = () => {
+    setAppState((prevState: any) => ({ ...prevState, isLoading: true }));
+    const apiClient = appState.apiClient
+    apiClient
+      .get('api/v1/msg/formats')
+      .then((res: any) => {
+        setAppState((prevState: any) => ({ ...prevState, formats: res.data }));
+      })
+      .catch((error: any) => {
+        console.log('error', error)
+      })
+      .finally(() => {
+        setAppState((prevState: any) => ({ ...prevState, isLoading: false }));
+      })
+    return true
+  }
+
+  const deleteFormat = (id: string) => {
+    setAppState({
+      ...appState,
+      isLoading: true
+    })
+    const apiClient = appState.apiClient
+    apiClient
+      .delete(`api/v1/msg/format/${id}`)
+      .then((res: any) => {
+        setAppState({
+          ...appState,
+          formats: res.data,
+        })
+      })
+      .catch((error: any) => {
+        console.log('error', error)
+      })
+      .finally(() => {
+        setAppState({
+          ...appState,
+          isLoading: false
+        })
+      })
+  }
 
   const connectToGhl = () => {
     if (appState.connected) {
@@ -85,13 +129,33 @@ const Sidebar = () => {
     setExpModal(false)
   }
 
+  const handleSetFormat = (e: any, id: string, checked: boolean) => {
+    setAppState({
+      ...appState,
+      currentFormatId: checked ? '' : id
+    })
+    if (checked) {
+      setSetting((prev: any) => ({
+        ...defaultSetting
+      }))
+    } else {
+      let format = appState.formats.find((f: any) => f.id === id)
+      if (format) {
+        setSetting({
+          ...setting,
+          ...format
+        })
+      }
+    }
+  }
+
   return (
     <div className='sidebar-content'>
       <div className='sidebar-header'>
         <p className='sidebar-title'>Agency information</p>
       </div>
       <div className='account-container'>
-        <div className={appState.connected ? 'show' : 'hidden'}>
+        <div className={(appState.connected && isMounted) ? 'show' : 'hidden'}>
           <div>
             {agent.logoUrl != '' && <img src={agent.logoUrl} className='account-avatar' />}
           </div>
@@ -113,6 +177,18 @@ const Sidebar = () => {
       <button className='btn btn-primary' onClick={() => setExpModal(true)}>
         <p className='btn-text'>Health sherpa excel exports</p>
       </button>
+      <div className="mt-8"><span>Formats</span></div>
+      <div className="divider-x"></div>
+      <div className='formats-buttons-container'>
+
+        {
+          appState.formats.map((format: any, idx: number) => {
+            return (
+              <div className={appState.currentFormatId != format.id ? 'check-block-btn' : 'check-block-btn-checked'} key={idx} onClick={(e) => handleSetFormat(e, format.id, appState.currentFormatId == format.id)} >{format.formatName}</div>
+            )
+          })
+        }
+      </div>
       <div className='flex mt-8'>
         <button className='inline'><IconRotateLeft /></button>
         <span className='ml-2 font-medium'>History</span>

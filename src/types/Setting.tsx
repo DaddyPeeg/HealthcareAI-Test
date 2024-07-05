@@ -1,6 +1,8 @@
 export interface SettingInterface {
   openAiAPIKey: OpenAiAPIKeyInterface | null
   excelExplore: ExcelExploreInterface | null
+  id: string,
+  formatName: string
   mission: string
   tone: string
   plan: string
