@@ -1,6 +1,5 @@
 import Sidebar from '@components/pages/main/Sidebar';
 import Content from '@components/pages/main/Content';
-import Loader from '@components/common/Loader';
 
 const Main = () => {
   return (

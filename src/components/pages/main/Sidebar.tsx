@@ -7,9 +7,10 @@ import ApiKeyModal from '@components/pages/main/modals/ApiKeyModal';
 import ExcelExploreModal from '@components/pages/main/modals/ExcelExploreModal';
 import { SettingInterface } from '@types/Setting';
 import { AgentInterface } from '@types/Agent';
-import { defaultAgent } from '@utils/Default'
 import { AppStateInterface } from '@types/AppState';
-import { defaultSetting } from '@utils/Default'
+import { defaultAgent } from '@utils/Default';
+import { defaultSetting } from '@utils/Default';
+import { toast } from 'react-toastify';
 
 const clientId = import.meta.env.VITE_GHL_CLIENT_ID;
 
@@ -30,6 +31,7 @@ const Sidebar = () => {
       })
         .then((response: any) => {
           if (!response) {
+            toast.warning('Please connect to GHL!')
             return;
           }
           const data = response.location
@@ -58,6 +60,7 @@ const Sidebar = () => {
             connected: !appState.connected
           }))
           setIsMounted(true)
+          toast.success('Successfully connected!')
         })
         .catch((error: any) => {
           console.log('error', error)
@@ -84,31 +87,6 @@ const Sidebar = () => {
     return true
   }
 
-  const deleteFormat = (id: string) => {
-    setAppState({
-      ...appState,
-      isLoading: true
-    })
-    const apiClient = appState.apiClient
-    apiClient
-      .delete(`api/v1/msg/format/${id}`)
-      .then((res: any) => {
-        setAppState({
-          ...appState,
-          formats: res.data,
-        })
-      })
-      .catch((error: any) => {
-        console.log('error', error)
-      })
-      .finally(() => {
-        setAppState({
-          ...appState,
-          isLoading: false
-        })
-      })
-  }
-
   const connectToGhl = () => {
     if (appState.connected) {
       return;
@@ -122,6 +100,7 @@ const Sidebar = () => {
   }
 
   const handleApiConnect = () => {
+
     setApiKeyModal(false)
   }
 

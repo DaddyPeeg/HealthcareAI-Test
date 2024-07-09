@@ -19,8 +19,6 @@ export const defaultExcelExplore: ExcelExploreInterface = {
 }
 
 export const defaultSetting: SettingInterface = {
-  openAiAPIKey: defaultOpenAiAPIKey,
-  excelExplore: defaultExcelExplore,
   id: '',
   formatName: '',
   mission: '',
@@ -58,6 +56,8 @@ export const defaultAgent: AgentInterface = {
 }
 
 export const defaultAppState: AppStateInterface = {
+  openAiAPIKey: defaultOpenAiAPIKey,
+  excelExplore: defaultExcelExplore,
   formats: [],
   apiClient: new API(''),
   currentFormatId: '',

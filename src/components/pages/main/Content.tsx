@@ -13,6 +13,7 @@ import { appStateAtom } from '@state/AppState';
 import { SettingInterface } from "@types/Setting";
 import { AppStateInterface } from "@types/AppState";
 import { defaultSetting } from "@utils/Default";
+import { toast } from 'react-toastify';
 
 const Content = () => {
   const [appState, setAppState] = useRecoilState<AppStateInterface>(appStateAtom)
@@ -137,8 +138,14 @@ const Content = () => {
     apiClient.post('gpt/ask', { ...setting, users: mode ? [...selectedUsers] : [] })
       .then((response: any) => {
         setGptResponse(response.message)
+        if (mode) {
+          toast.success('Successfully sent')
+        } else {
+          toast.success('Successfully generated')
+        }
       })
       .catch((error: any) => {
+        toast.error('Error occurrs!')
         console.log('error', error)
       })
       .finally(() => {
@@ -171,15 +178,54 @@ const Content = () => {
           ...defaultSetting
         }))
         setGptResponse('')
+        toast.success('Format saved successfully')
       })
       .catch((error: any) => {
         console.log('error', error)
+        toast.error('Fail to save format')
       })
       .finally(() => {
         setAppState((prev: any) => ({
           ...prev,
           isLoading: false
         }))
+      })
+  }
+
+
+  const deleteFormat = (e: any, id: string) => {
+    setAppState((prev: any) => ({
+      ...prev,
+      isLoading: true
+    }))
+    const apiClient = appState.apiClient
+    apiClient
+      .delete(`api/v1/msg/format?id=${id}`)
+      .then((res: any) => {
+        setAppState((prev: any) => ({
+          ...prev,
+          formats: res.data,
+        }))
+        setSetting((prev: any) => ({
+          ...defaultSetting
+        }))
+        setAppState((prev: any) => ({
+          ...prev,
+          currentFormatId: ''
+        }))
+
+        toast.success('Format deleted successfully')
+      })
+      .catch((error: any) => {
+        console.log('error', error)
+        toast.error('Fail to delete!')
+      })
+      .finally(() => {
+        setAppState((prev: any) => ({
+          ...prev,
+          isLoading: false
+        }))
+        setModalsStatus({ ...modalsStatus, formatNameModal: false })
       })
   }
 
@@ -311,7 +357,7 @@ const Content = () => {
               <button className='btn-submit' onClick={(e: any) => getMessage(e, false)}>Test welcome message</button>
             </div>
             <div className="flex md:w-auto w-full">
-              <button className='btn-submit' onClick={openFormatTitleModal}>Save as favourite format</button>
+              <button className='btn-submit' onClick={openFormatTitleModal}>Save/Delete favourite format</button>
             </div>
           </div>
           <div className="divider-x"></div>
@@ -366,6 +412,7 @@ const Content = () => {
         isOpen={modalsStatus.formatNameModal}
         onClose={() => { setModalsStatus({ ...modalsStatus, formatNameModal: false }); setFormatName(setting.formatName) }}
         onConfirm={(e: any, data: any) => { saveFavFormat(e, formatName) }}
+        onDelete={(e: any, data: any) => { deleteFormat(e, appState.currentFormatId) }}
       >
         <div className="inline-form-container">
           <div className="inline-form-element">

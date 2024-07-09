@@ -1,6 +1,4 @@
 export interface SettingInterface {
-  openAiAPIKey: OpenAiAPIKeyInterface | null
-  excelExplore: ExcelExploreInterface | null
   id: string,
   formatName: string
   mission: string
@@ -19,19 +17,4 @@ export interface SettingInterface {
   zipCode: number
   agentFirstName: string
   agentLastName: string
-}
-
-export interface OpenAiAPIKeyInterface {
-  apiKey: string
-  secretKey: string
-  whiteLink: boolean
-  logoUrl: string
-  ghlBusinessIT: string
-  ghlAPI: string
-}
-
-export interface ExcelExploreInterface {
-  description: string
-  type: number
-  fileUrl: string
 }

@@ -3,6 +3,7 @@
 @tailwind utilities;
 @fortawesome/fontawesome-free/css/all.min.css;
 @react-toastify/dist/ReactToastify.css;
+
 * {
   box-sizing: border-box;
   font-family: 'Inter', sans-serif;
@@ -36,7 +37,7 @@
 }
 
 .main-container {
-  @apply flex md:flex-row flex-col w-full overflow-auto relative
+  @apply flex relative md:flex-row flex-col w-full overflow-auto relative
 }
 
 /* sidebar */
