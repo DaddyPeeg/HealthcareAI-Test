@@ -29,10 +29,13 @@
     "flowbite": "^2.3.0",
     "init": "^0.1.2",
     "postcss-cli": "^11.0.0",
+    "react-icons": "^5.2.1",
+    "react-router-dom": "^6.24.1",
     "react-tailwindcss-datepicker": "^1.6.6",
     "react-tailwindcss-select": "^1.8.5",
     "react-toastify": "^10.0.5",
     "recoil": "^0.7.7",
-    "recoil-persist": "^5.1.0"
+    "recoil-persist": "^5.1.0",
+    "tailwind-merge": "^2.4.0"
   }
 }

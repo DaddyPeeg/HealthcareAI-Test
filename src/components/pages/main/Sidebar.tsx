@@ -109,23 +109,37 @@ const Sidebar = () => {
   }
 
   const handleSetFormat = (e: any, id: string, checked: boolean) => {
-    setAppState({
-      ...appState,
-      currentFormatId: checked ? '' : id
-    })
+    const apiClient = appState.apiClient
+
+    setAppState((prevState: any) => ({ ...prevState, isLoading: true }));
+
     if (checked) {
+      setAppState({
+        ...appState,
+        currentFormatId: checked ? '' : id
+      })
       setSetting((prev: any) => ({
         ...defaultSetting
       }))
-    } else {
-      let format = appState.formats.find((f: any) => f.id === id)
-      if (format) {
+
+      return toast.success('Now you have removed the format!')
+    }
+    apiClient
+      .get(`api/v1/msg/format?id=${id}`)
+      .then((res: any) => {
         setSetting({
           ...setting,
-          ...format
+          ...res.data
         })
-      }
-    }
+        toast.success('Successfully set the default format!')
+      })
+      .catch((error: any) => {
+        console.log('error', error)
+        toast.error('Fail to update default format')
+      })
+      .finally(() => {
+        setAppState((prevState: any) => ({ ...prevState, isLoading: false }));
+      })
   }
 
   return (
