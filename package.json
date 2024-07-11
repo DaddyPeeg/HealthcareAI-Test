@@ -6,12 +6,16 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "codegen-graphql": "graphql-codegen --config ./src/graphql/codegen.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@graphql-codegen/cli": "^5.0.2",
+    "@graphql-codegen/client-preset": "^4.3.2",
+    "@types/apollo-upload-client": "^18.0.0",
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
     "@vitejs/plugin-react": "^2.2.0",
@@ -24,9 +28,13 @@
     "vite": "^3.2.10"
   },
   "dependencies": {
+    "@apollo/client": "^3.10.8",
+    "@lifeomic/axios-fetch": "^3.1.0",
+    "apollo-upload-client": "^18.0.1",
     "axios": "^1.7.2",
     "dayjs": "^1.11.11",
     "flowbite": "^2.3.0",
+    "graphql": "^16.9.0",
     "init": "^0.1.2",
     "postcss-cli": "^11.0.0",
     "react-icons": "^5.2.1",
