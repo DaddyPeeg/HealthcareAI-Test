@@ -10,8 +10,9 @@ export const AuthenticateUserWithPassword = graphql(`
         sessionToken
         item {
           id
-          displayName
+          name
           email
+          displayName
         }
       }
     }
