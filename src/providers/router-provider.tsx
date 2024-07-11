@@ -7,6 +7,7 @@ import App from "../App";
 import SignInPage from "@pages/SignIn";
 import MainLayout from "../../src/layout";
 import SignUpPage from "@pages/SignUp";
+import Test from "@pages/Test";
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
       {
         path: "/sign-up",
         element: <SignUpPage />,
+      },
+      {
+        path: "/test",
+        element: <Test />,
       },
     ],
   },
