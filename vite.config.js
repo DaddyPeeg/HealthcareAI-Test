@@ -20,6 +20,7 @@ export default defineConfig({
       "@types": path.resolve(__dirname, "src/types"),
       "@hooks": path.resolve(__dirname, "src/hooks"),
       "@graphql": path.resolve(__dirname, "src/graphql"),
+      "@": path.resolve(__dirname, "./src"),
     },
   },
 });

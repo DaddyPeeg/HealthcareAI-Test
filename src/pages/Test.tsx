@@ -1,18 +1,21 @@
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { AUTHSTORE } from "@graphql/authStorage";
 import { apolloClient } from "@graphql/client";
 import { AuthenticateUserWithPassword, User } from "@graphql/declarations/auth";
 
 const Test = () => {
-  const { data, refetch } = useQuery(User);
-
+  const { data, refetch, loading } = useQuery(User);
+  const {} = useMutation(AuthenticateUserWithPassword, {
+    variables: {
+      email: "admin",
+      adminPassword: "admin123",
+    },
+  });
+  console.log(loading);
   const signin = async () => {
     const result = await apolloClient.mutate({
       mutation: AuthenticateUserWithPassword,
-      variables: {
-        email: "admin",
-        adminPassword: "admin123",
-      },
+      variables: {},
     });
 
     if (
@@ -37,6 +40,7 @@ const Test = () => {
 
   return (
     <div className="flex flex-col gap-2">
+      {/* <p>{loading}</p> */}
       <p>Data: {JSON.stringify(data)}</p>
       <button onClick={signin}>Signin</button>
       <button onClick={signout}>Signout</button>

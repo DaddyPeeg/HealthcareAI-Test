@@ -1,6 +1,7 @@
 import { graphql } from "../generated";
+import { gql } from "@apollo/client";
 
-export const AuthenticateUserWithPassword = graphql(`
+export const AuthenticateUserWithPassword = gql(`
   mutation AuthenticateUserWithPassword(
     $email: String!
     $adminPassword: String!

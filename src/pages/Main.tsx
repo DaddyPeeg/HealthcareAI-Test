@@ -4,10 +4,10 @@ import Content from "@components/pages/main/Content";
 const Main = () => {
   return (
     <div className="flex w-full justify-end">
-      <div className="flex fixed left-0 bg-white h-full md:w-[325px] w-full">
+      <div className=" fixed left-[-325px] lg:left-[0px] bg-white h-full w-[325px] lg:flex hidden">
         <Sidebar />
       </div>
-      <div className="w-[calc(100%-325px)]">
+      <div className="lg:w-[calc(100%-325px)] w-full">
         <Content />
       </div>
     </div>

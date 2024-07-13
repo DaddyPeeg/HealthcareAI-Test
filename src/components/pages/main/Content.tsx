@@ -14,6 +14,7 @@ import { SettingInterface } from "../../../types/Setting";
 import { AppStateInterface } from "../../../types/AppState";
 import { defaultSetting } from "@utils/Default";
 import { toast } from "react-toastify";
+import { SheetDemo } from "@/components/common/SidebarSheet";
 
 const Content = () => {
   const [appState, setAppState] =
@@ -231,10 +232,13 @@ const Content = () => {
 
   return (
     <div className="h-full">
-      <div className="header-container">
+      <div className="header-container justify-between px-8">
         <p className="header-title">
-          Federal<span className="text-2xl text-primary">Plans</span>
+          Federal<span className="text-2xl t>r>ext-primary">Plans</span>
         </p>
+        <span className="block lg:hidden">
+          <SheetDemo />
+        </span>
       </div>
       <div className="form-container">
         <div className="form-content">
@@ -419,7 +423,7 @@ const Content = () => {
             </div>
           </div>
           <div className="divider-x"></div>
-          <div className="form-submit-container">
+          <div className="grid gap-4 grid-cols-1 md:grid-cols-2 w-full">
             <div className="flex flex-1 w-full relative">
               <textarea
                 rows={1}
@@ -429,24 +433,29 @@ const Content = () => {
                   setGptResponse(e.target.value);
                 }}
                 placeholder="Hi how may i help you, please enter..."
-                className="p-4 pl-12 w-full border rounded-[12px] border-primary focus:ring-primary h-40 focus:border-primary resize-none overflow-y-hidden"
+                className="p-4 pl-12 w-full border rounded-[12px] border-primary focus:ring-primary min-h-28 focus:border-primary resize-none overflow-y-hidden"
               />
               <div className="absolute top-4 left-4">
                 <IconMessage />
               </div>
             </div>
-            <div className="flex md:w-auto w-full">
-              <button
-                className="btn-submit"
-                onClick={(e: any) => getMessage(e, false)}
-              >
-                Test welcome message
-              </button>
-            </div>
-            <div className="flex md:w-auto w-full">
-              <button className="btn-submit" onClick={openFormatTitleModal}>
-                Save/Delete favourite format
-              </button>
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-start">
+              <div className="flex md:w-auto w-full">
+                <button
+                  className="btn-submit w-full"
+                  onClick={(e: any) => getMessage(e, false)}
+                >
+                  Test welcome message
+                </button>
+              </div>
+              <div className="flex md:w-auto w-full">
+                <button
+                  className="btn-submit w-full"
+                  onClick={openFormatTitleModal}
+                >
+                  Save/Delete favourite format
+                </button>
+              </div>
             </div>
           </div>
           <div className="divider-x"></div>
